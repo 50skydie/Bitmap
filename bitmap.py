@@ -4,10 +4,10 @@ import plotly.graph_objects as go
 
 
 class BitMap():
-    def __init__(self, matrix): #takes bitmap matrix
+    def __init__(self, matrix):
         self.matrix = matrix
 
-    def showwithscale(self, input_scalar): #takes scale
+    def showwithscale(self, input_scalar):
         Zrows = len(self.matrix)
         Zcols = len(self.matrix[0])
         ii = math.ceil(Zcols/input_scalar)
@@ -17,8 +17,7 @@ class BitMap():
         Zcols = len(self.matrix[0])
         jj = math.ceil(Zrows/input_scalar)
         j_adjust = np.zeros((jj*input_scalar-Zrows, Zcols), dtype=np.int64)
-        self.matrix = np.append(self.matrix, j_adjust, axis=0)
-        #tu sie konczy sprawdzac czy matrix podzielny przez skalar jesli nie, to 0 uzupełnia musze to zmienic bo edge case 
+        self.matrix = np.append(self.matrix, j_adjust, axis=0) 
         lineholder = []
         matrixholder = []
         finalmatrix = []
@@ -40,7 +39,6 @@ class BitMap():
                 fmatline = []
         Zrows = len(np.array(fmat))
         Zcols = len(np.array(fmat)[0])
-        #konczy usredniac i formowac matrixa
         fig = go.Figure(data=[go.Surface(z=np.array(fmat))])
         fig.update_layout(title='Scale 1:'+str(input_scalar))
         fig.update_layout(
