@@ -7,7 +7,8 @@ class BitMap():
     def __init__(self, matrix):
         self.matrix = matrix
 
-    def showwithscale(self, input_scalar):
+
+    def scale(self, input_scalar):
         Zrows = len(self.matrix)
         Zcols = len(self.matrix[0])
         ii = math.ceil(Zcols/input_scalar)
@@ -17,7 +18,7 @@ class BitMap():
         Zcols = len(self.matrix[0])
         jj = math.ceil(Zrows/input_scalar)
         j_adjust = np.zeros((jj*input_scalar-Zrows, Zcols), dtype=np.int64)
-        self.matrix = np.append(self.matrix, j_adjust, axis=0) 
+        self.matrix = np.append(self.matrix, j_adjust, axis=0)
         lineholder = []
         matrixholder = []
         finalmatrix = []
@@ -45,7 +46,32 @@ class BitMap():
                 scene = {
                     "xaxis": {"nticks": 1},
                     "zaxis": {"nticks": 1},
-                    "aspectratio": {"x": Zrows, "y": Zcols, "z": 10} # z = ? moze max - min ? 
+                    "aspectratio": {"x": Zrows, "y": Zcols, "z": 10}
+                })
+        fig.update_traces(contours_z=dict(show=True, usecolormap=True, highlightcolor="limegreen", project_z=True))
+        fig.show()
+
+
+    def zoom(self, xstart, xrange, ystart, yrange, scale):
+        if(xstart*scale+xrange*scale > len(self.matrix) or ystart*scale + yrange*scale > len(self.matrix[0])):
+            print("cant zoom bigger terrain than exist")
+            return
+        zoomline = []
+        zoommatrix = []
+        for x, i in enumerate(range(0, xrange*scale)):
+            for y, j in enumerate(range(0, yrange*scale)):
+                zoomline.append(self.matrix[xstart*scale + x][ystart*scale + y])
+            zoommatrix.append(zoomline)
+            zoomline = []
+        Zrows = len(np.array(zoommatrix))
+        Zcols = len(np.array(zoommatrix)[0])
+        fig = go.Figure(data=[go.Surface(z=np.array(zoommatrix))])
+        fig.update_layout(title='Zoom from x:'+str(xstart)+' to '+str(xrange*scale)+' and from y: '+str(ystart)+' to '+str(yrange*scale))
+        fig.update_layout(
+                scene = {
+                    "xaxis": {"nticks": 1},
+                    "zaxis": {"nticks": 1},
+                    "aspectratio": {"x": Zrows, "y": Zcols, "z": 10}
                 })
         fig.update_traces(contours_z=dict(show=True, usecolormap=True, highlightcolor="limegreen", project_z=True))
         fig.show()
