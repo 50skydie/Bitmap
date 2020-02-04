@@ -6,7 +6,6 @@ class BitMap():
     def __init__(self, matrix):
         self.matrix = matrix
 
-
     def scale(self, scale, hsens):
         self.matrix = np.array(self.matrix)
         self.matrix = self.matrix.astype(int)
@@ -27,27 +26,17 @@ class BitMap():
         fig.update_traces(contours_z=dict(show=True, usecolormap=True, highlightcolor="limegreen", project_z=True))
         fig.show()
 
-
-    def zoom(self, xstart, xrange, ystart, yrange, scale):
-        if(xstart*scale+xrange*scale > len(self.matrix) or ystart*scale + yrange*scale > len(self.matrix[0])):
-            print("cant zoom bigger terrain than exist")
-            return
-        zoomline = []
-        zoommatrix = []
-        for x in range(0, xrange*scale):
-            for y in range(0, yrange*scale):
-                zoomline.append(self.matrix[xstart*scale + x][ystart*scale + y])
-            zoommatrix.append(zoomline)
-            zoomline = []
-        Zrows = len(np.array(zoommatrix))
-        Zcols = len(np.array(zoommatrix)[0])
+    def zoom(self, xstart, xrange, ystart, yrange, scale, hsens):
+        zoommatrix = np.array(self.matrix)[xstart*scale:xrange*scale+1, ystart*scale:yrange*scale+1]
+        rows = zoommatrix.shape[0]
+        cols = zoommatrix.shape[1]
         fig = go.Figure(data=[go.Surface(z=np.array(zoommatrix))])
-        fig.update_layout(title='Zoom from x:'+str(xstart)+' to '+str(xrange*scale)+' and from y: '+str(ystart)+' to '+str(yrange*scale))
+        fig.update_layout(title='Zoom from x:'+str(xstart*scale)+' to '+str(xrange*scale)+' and from y: '+str(ystart*scale)+' to '+str(yrange*scale))
         fig.update_layout(
                 scene = {
                     "xaxis": {"nticks": 1},
                     "zaxis": {"nticks": 1},
-                    "aspectratio": {"x": Zrows, "y": Zcols, "z": 10}
+                    "aspectratio": {"x": rows, "y": cols, "z": hsens}
                 })
         fig.update_traces(contours_z=dict(show=True, usecolormap=True, highlightcolor="limegreen", project_z=True))
         fig.show()
