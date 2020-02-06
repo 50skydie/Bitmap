@@ -1,8 +1,7 @@
 # Bitmap
-Bitmap.py lib
 
-BitMap(matrix) is a constructor that takes array as input
+Bitmap(matrix) - pass input matrix
 
-.scale is a method that render given matrix with passed scale
+Bitmap.scale(scale, hsens) - rendering scaled terrain with given scale and height sens.
 
-.zoom is a method that will show only given size of terrain, takes statring xy poz, xy len and scale
+Bitmap.zoom(starting_x, x_range, starting_y, y_range, scale, hsens)- render terrain from starting_x/y*scale to x/y_range*scale with height sens.
