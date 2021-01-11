@@ -5,5 +5,8 @@ a = []
 for x in f:
      a.append(x.strip().rstrip().split(' '))
 
-m1 = bm.BitMap(a)
-m1.scale(25, 2)
+#print(a)
+m1 = bm.BitMap([0])
+m1.readBitmap('bitmap.jpg')
+m1.scale(1)
+m1.show(20)
